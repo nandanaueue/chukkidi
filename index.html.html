@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nandana's Crazy Love Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: black;
+      color: white;
+      overflow-x: hidden;
+    }
+    .section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .button {
+      background-color: red;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+    .hidden {
+      display: none;
+    }
+    .popup {
+      font-size: 22px;
+      margin-top: 20px;
+      animation: pop 0.5s ease-in-out;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .heart-gif {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://media.tenor.com/I6kN-6X7nhAAAAAi/red-heart.gif');
+      background-size: cover;
+      animation: float 10s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" autoplay loop>
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/ElvisPresley-Can'tHelpFallingInLove.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="section" id="intro">
+    <h1>Hiii Aalimmmm 🖤</h1>
+    <p>This is something new I tried making to make myself happy<br>(not to make <em>you</em> happy 🙄)</p>
+    <button class="button" onclick="showSection('quizIntro')">CLICK NEXT TO GO NEXT</button>
+  </div>
+
+  <div class="section hidden" id="quizIntro">
+    <p>This is a quiz for checking literally nothing. Just answer them wisely 😏</p>
+    <button class="button" onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div class="section hidden" id="quiz"></div>
+
+  <div class="section hidden" id="result">
+    <h2>HERE U GO U FCKING FAILED THE TEST 🤡🎉</h2>
+    <p>CONGRATS — NANDANA LOVES U, STUPIDASS 💘</p>
+    <p>So babe, bye. Hope you liked this stupid thing. Love you sooo muchhhh — NAANA ❤️</p>
+    <button class="button" onclick="showSection('thankYou')">Next</button>
+  </div>
+
+  <div class="section hidden" id="thankYou">
+    <h2>Thank You 💋</h2>
+    <p>Thanks for playing, you silly lil lovebug 💌</p>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: 'YOUR FIRST QUESTION ISSSS\nWhat does Nandana like the most?',
+        options: ['Aalim', 'Pasta', 'Music', 'Herself'],
+        correct: 0
+      },
+      {
+        question: 'Do you think Nandana is the one?',
+        options: ['Yes', 'Yes', 'Yes', 'Yes', 'Yes'],
+        correct: 0
+      },
+      {
+        question: 'Do you think Nandana will cook whatever you want?',
+        options: ['Hell yeah', 'Yessss', 'No', 'No, bitch doesn’t cook'],
+        correct: 0
+      },
+      {
+        question: 'What’s Nandana’s fav thing to do?',
+        options: ['Her bf', 'Her loml Aalim', 'Chikudumukudu'],
+        correct: -1,
+        secret: 'NOT U OFC BUAHAHH 💅😂'
+      },
+      {
+        question: 'Who do you think is the person she enjoys talking to?',
+        options: [],
+        correct: -1,
+        secret: 'No need of options cause it’s fckin’ obvious… She doesn’t like to—oops… She only enjoys when it’s *you* she talks to (lie) (mwah) 💋'
+      }
+    ];
+
+    let current = 0;
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function startQuiz() {
+      showSection('quiz');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const quiz = document.getElementById('quiz');
+      const q = quizData[current];
+      quiz.innerHTML = `<div><h2>${q.question}</h2></div>`;
+      if (q.options.length > 0) {
+        q.options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'button';
+          btn.textContent = opt;
+          btn.onclick = () => checkAnswer(i);
+          quiz.appendChild(btn);
+        });
+      } else {
+        quiz.innerHTML += `<p class='popup'>${q.secret}</p><button class="button" onclick="nextQuestion()">Next</button>`;
+      }
+    }
+
+    function checkAnswer(i) {
+      const q = quizData[current];
+      const popup = document.createElement('p');
+      popup.className = 'popup';
+      if (i === q.correct) {
+        popup.textContent = 'RIGHT ANSWER BABY 😘';
+      } else {
+        popup.textContent = 'WRONG ANSWERRRR 😠';
+      }
+      document.getElementById('quiz').appendChild(popup);
+      setTimeout(() => nextQuestion(), 1500);
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quizData.length) {
+        showQuestion();
+      } else {
+        showSection('result');
+      }
+    }
+
+    function generateHearts() {
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-gif';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        document.body.appendChild(heart);
+      }
+    }
+
+    window.onload = generateHearts;
+  </script>
+</body>
+</html>
